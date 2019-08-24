@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "outDir": "./lib",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "strict": true
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}
