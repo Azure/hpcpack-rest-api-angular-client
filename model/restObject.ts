@@ -13,5 +13,5 @@ import { RestProperty } from './restProperty';
 
 
 export interface RestObject { 
-    properties?: Array<RestProperty>;
+    Properties?: Array<RestProperty>;
 }

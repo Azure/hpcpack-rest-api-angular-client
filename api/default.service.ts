@@ -25,7 +25,9 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DefaultService {
 
     protected basePath = 'https://localhost/hpc';
@@ -61,15 +63,15 @@ export class DefaultService {
      * Add Task
      * Add a task to a job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Properties of task to add.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addTask(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public addTask(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public addTask(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public addTask(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addTask(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public addTask(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public addTask(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public addTask(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling addTask.');
@@ -78,8 +80,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -121,16 +123,16 @@ export class DefaultService {
      * Cancel Job
      * Cancel the specified job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param forced Specifies whether to stop the job immediately without using the grace period for canceling the tasks in the job and without running the node release task, if the job contains one. True indicates that the job should stop immediately without using the grace period for canceling the tasks in the job and without running the node release task. False indicates that the job should not stop immediately and should use the grace period for canceling the tasks in the job and run the node release task.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public cancelJob(jobId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public cancelJob(jobId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public cancelJob(jobId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public cancelJob(jobId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public cancelJob(jobId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public cancelJob(jobId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public cancelJob(jobId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public cancelJob(jobId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling cancelJob.');
@@ -145,8 +147,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -191,16 +193,16 @@ export class DefaultService {
      * @param jobId Job Id
      * @param taskId Task Id
      * @param subtaskId Subtask Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param forced Specifies whether to stop the subtask immediately without using the grace period for canceling a task. True indicates that the subtask should stop immediately without using the grace period for canceling a task. False indicates that the subtask should use the grace period for canceling.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public cancelSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling cancelSubtask.');
@@ -223,8 +225,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -268,16 +270,16 @@ export class DefaultService {
      * Cancel the specified task.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param forced Specifies whether to stop the task immediately without using the grace period for canceling a task. True indicates that the task should stop immediately without using the grace period for canceling a task. False indicates that the task should use the grace period for canceling a task.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public cancelTask(jobId: number, taskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public cancelTask(jobId: number, taskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public cancelTask(jobId: number, taskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public cancelTask(jobId: number, taskId: number, xMsAsUser?: string, forced?: boolean, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public cancelTask(jobId: number, taskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public cancelTask(jobId: number, taskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public cancelTask(jobId: number, taskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public cancelTask(jobId: number, taskId: number, x_ms_as_user?: string, forced?: boolean, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling cancelTask.');
@@ -296,8 +298,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -339,21 +341,21 @@ export class DefaultService {
     /**
      * Create Job
      * Creates a new job on the HPC cluster.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Properties of job to create
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createJob(xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public createJob(xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public createJob(xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public createJob(xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createJob(x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public createJob(x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public createJob(x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public createJob(x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -394,21 +396,21 @@ export class DefaultService {
     /**
      * Create Job From XML
      * Create a new job on the HPC cluster by using the information in the specified job XML string.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param xml A job described in XML. For an example:  &#x60;&#x60;&#x60;xml &lt;Job&gt;   &lt;Tasks&gt;     &lt;Task CommandLine&#x3D;\&quot;hostname\&quot; MinCores&#x3D;\&quot;1\&quot; MaxCores&#x3D;\&quot;1\&quot; /&gt;   &lt;/Tasks&gt; &lt;/Job&gt; &#x60;&#x60;&#x60;  Note that since the server accepts input in JSON, the XML has to be encoded in a JSON string.  See [Job Schema](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc907034%28v%3dvs.85%29) for more details on the XML content. 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createJobFromXml(xMsAsUser?: string, xml?: string, observe?: 'body', reportProgress?: boolean): Observable<number>;
-    public createJobFromXml(xMsAsUser?: string, xml?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
-    public createJobFromXml(xMsAsUser?: string, xml?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
-    public createJobFromXml(xMsAsUser?: string, xml?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public createJobFromXml(x_ms_as_user?: string, xml?: string, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public createJobFromXml(x_ms_as_user?: string, xml?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public createJobFromXml(x_ms_as_user?: string, xml?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public createJobFromXml(x_ms_as_user?: string, xml?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -450,15 +452,15 @@ export class DefaultService {
      * Finish Job
      * Finish the specified job. It&#39;s silimar to canceling a job, but sets the job state to \&quot;Finished\&quot; rather than \&quot;Canceled\&quot;.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public finishJob(jobId: number, xMsAsUser?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public finishJob(jobId: number, xMsAsUser?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public finishJob(jobId: number, xMsAsUser?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public finishJob(jobId: number, xMsAsUser?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public finishJob(jobId: number, x_ms_as_user?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public finishJob(jobId: number, x_ms_as_user?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public finishJob(jobId: number, x_ms_as_user?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public finishJob(jobId: number, x_ms_as_user?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling finishJob.');
@@ -467,8 +469,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -512,15 +514,15 @@ export class DefaultService {
      * @param jobId Job Id
      * @param taskId Task Id
      * @param subtaskId Subtask Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public finishSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public finishSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public finishSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public finishSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public finishSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public finishSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public finishSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public finishSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling finishSubtask.');
@@ -537,8 +539,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -581,15 +583,15 @@ export class DefaultService {
      * Finish the specified task. It&#39;s silimar to canceling a task, but sets the task state to \&quot;Finished\&quot; rather than \&quot;Canceled\&quot;.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public finishTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public finishTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public finishTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public finishTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public finishTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public finishTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public finishTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public finishTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling finishTask.');
@@ -602,8 +604,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -644,19 +646,19 @@ export class DefaultService {
     /**
      * Get Active Head Node Name
      * Get the name of the active head node of the HPC Pack cluster.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterActiveHeadNode(xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getClusterActiveHeadNode(xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getClusterActiveHeadNode(xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getClusterActiveHeadNode(xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterActiveHeadNode(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public getClusterActiveHeadNode(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public getClusterActiveHeadNode(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public getClusterActiveHeadNode(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -692,19 +694,19 @@ export class DefaultService {
     /**
      * Get DateTime Format
      * Get DateTime format for the DateTime objects returned in the API
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterDateTimeFormat(xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getClusterDateTimeFormat(xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getClusterDateTimeFormat(xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getClusterDateTimeFormat(xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterDateTimeFormat(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public getClusterDateTimeFormat(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public getClusterDateTimeFormat(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public getClusterDateTimeFormat(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -740,19 +742,19 @@ export class DefaultService {
     /**
      * Get HPC Pack Version
      * Get the version of Microsoft HPC Pack installed on the HPC cluster that hosts the web service.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterVersion(xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getClusterVersion(xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getClusterVersion(xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getClusterVersion(xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterVersion(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public getClusterVersion(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public getClusterVersion(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public getClusterVersion(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -789,15 +791,15 @@ export class DefaultService {
      * Get Job
      * Get information about the specified job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties A comma-separated list of the names for the properties of the job for which you want to get values. If you do not specify this parameter, the response contains values for all of the properties of the job. See [ISchedulerJob](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897474%28v%3dvs.85%29) for available properties.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJob(jobId: number, xMsAsUser?: string, properties?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getJob(jobId: number, xMsAsUser?: string, properties?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getJob(jobId: number, xMsAsUser?: string, properties?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getJob(jobId: number, xMsAsUser?: string, properties?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJob(jobId: number, x_ms_as_user?: string, properties?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getJob(jobId: number, x_ms_as_user?: string, properties?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getJob(jobId: number, x_ms_as_user?: string, properties?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getJob(jobId: number, x_ms_as_user?: string, properties?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getJob.');
@@ -811,8 +813,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -850,15 +852,15 @@ export class DefaultService {
      * Get Job Custom Properties
      * Get the values of the specified custom properties for the job, or the values of all of the properties if none are specified.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param names A comma-separated list of the names for the custom properties of the job for which you want to get values. If you do not specify the Names parameter, the response contains values for all of the custom properties for the job.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobCustomProperties(jobId: number, xMsAsUser?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getJobCustomProperties(jobId: number, xMsAsUser?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getJobCustomProperties(jobId: number, xMsAsUser?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getJobCustomProperties(jobId: number, xMsAsUser?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobCustomProperties(jobId: number, x_ms_as_user?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getJobCustomProperties(jobId: number, x_ms_as_user?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getJobCustomProperties(jobId: number, x_ms_as_user?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getJobCustomProperties(jobId: number, x_ms_as_user?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getJobCustomProperties.');
@@ -872,8 +874,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -911,15 +913,15 @@ export class DefaultService {
      * Get Job Environment Variables
      * Get the values of the specified environment variables for the job, or the values of all of the environment variables if none are specified.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param names A comma-separated list of the names for the environment variables in the job for which you want to get values. If you do not specify the Names parameter, the response contains values for all of the environment variables for the job. If an environment variable with a specified name does not exist for the job, the response contains an empty string for the value of that environment variable.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobEnvironmentVariables(jobId: number, xMsAsUser?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getJobEnvironmentVariables(jobId: number, xMsAsUser?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getJobEnvironmentVariables(jobId: number, xMsAsUser?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getJobEnvironmentVariables(jobId: number, xMsAsUser?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getJobEnvironmentVariables.');
@@ -933,8 +935,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -971,19 +973,19 @@ export class DefaultService {
     /**
      * Get Job Templates
      * Get a list of the names of the job templates that are available on the HPC cluster.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobTemplates(xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getJobTemplates(xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getJobTemplates(xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getJobTemplates(xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobTemplates(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getJobTemplates(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getJobTemplates(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getJobTemplates(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1019,7 +1021,7 @@ export class DefaultService {
     /**
      * Get Job List
      * Gets all/filtered jobs for the HPC cluster.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties A comma-separated list of the names for the properties of the jobs for which you want to get values. See [ISchedulerJob](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897474%28v%3dvs.85%29) for available properties.
      * @param owner The user who created, submitted, or queued the job.
      * @param filter Filter jobs by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;, and multiple filters can be ANDed like \&quot;&lt;filter1&gt;%20and%20&lt;filter2&gt;…\&quot;. Available filter names are _JobState_, _NodeGroup_ and _ChangeTimeFrom_. 
@@ -1029,10 +1031,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobs(xMsAsUser?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getJobs(xMsAsUser?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getJobs(xMsAsUser?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getJobs(xMsAsUser?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
@@ -1062,8 +1064,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1101,14 +1103,14 @@ export class DefaultService {
      * Get Node by Name
      * Get the values of all of the properties for the specified node.
      * @param name Node name.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodeByName(name: string, xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getNodeByName(name: string, xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getNodeByName(name: string, xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getNodeByName(name: string, xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodeByName(name: string, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getNodeByName(name: string, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getNodeByName(name: string, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getNodeByName(name: string, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling getNodeByName.');
@@ -1116,8 +1118,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1154,14 +1156,14 @@ export class DefaultService {
      * Get Node Group Members
      * Get the list of the nodes that belong to the specified node group.
      * @param name Node group name.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodeGroupMembers(name: string, xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getNodeGroupMembers(name: string, xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getNodeGroupMembers(name: string, xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getNodeGroupMembers(name: string, xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (name === null || name === undefined) {
             throw new Error('Required parameter name was null or undefined when calling getNodeGroupMembers.');
@@ -1169,8 +1171,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1206,19 +1208,19 @@ export class DefaultService {
     /**
      * Get Node Group List
      * Get the names and descriptions for all of the node groups for the HPC cluster.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodeGroups(xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getNodeGroups(xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getNodeGroups(xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getNodeGroups(xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodeGroups(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getNodeGroups(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getNodeGroups(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getNodeGroups(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1254,7 +1256,7 @@ export class DefaultService {
     /**
      * Get Node List
      * Get the values of the specified properties for all of the nodes in an HPC cluster.
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties A comma-separated list of the names for the properties of the nodes for which you want to get values. If you do not specify the Properties parameter, the response contains values for all of the available properties of the nodes. See [ISchedulerNode](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897552(v&#x3D;vs.85)) for available properties.
      * @param filter Filter result by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;. Now the only available filter is _NodeState_. 
      * @param sortNodesBy A node property by which nodes will be sorted. If this parameter is not specified or a property with a specified name does not exist for a node, the result will be sorted by node Id.
@@ -1263,10 +1265,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodes(xMsAsUser?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getNodes(xMsAsUser?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getNodes(xMsAsUser?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getNodes(xMsAsUser?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
@@ -1292,8 +1294,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1333,15 +1335,15 @@ export class DefaultService {
      * @param jobId Job Id
      * @param taskId Task Id
      * @param subtaskId Subtask Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties A comma-separated list of the names for the properties of the subtask for which you want to get values. If you do not specify this parameter, the response contains values for all of the properties of the subtask. See [ISchedulerTask](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897577(v&#x3D;vs.85)) for avaialbe properties.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getSubtask.');
@@ -1363,8 +1365,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1403,15 +1405,15 @@ export class DefaultService {
      * Get the values of the specified properties for the specified task, or the values of all of the properties if no properties are specified.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties A comma-separated list of the names for the properties of the task for which you want to get values. If you do not specify this parameter, the response contains values for all of the properties of the task. See [ISchedulerTask](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897577(v&#x3D;vs.85)) for avaialbe properties.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTask(jobId: number, taskId: number, xMsAsUser?: string, properties?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getTask(jobId: number, taskId: number, xMsAsUser?: string, properties?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getTask(jobId: number, taskId: number, xMsAsUser?: string, properties?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getTask(jobId: number, taskId: number, xMsAsUser?: string, properties?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTask(jobId: number, taskId: number, x_ms_as_user?: string, properties?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getTask(jobId: number, taskId: number, x_ms_as_user?: string, properties?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getTask(jobId: number, taskId: number, x_ms_as_user?: string, properties?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getTask(jobId: number, taskId: number, x_ms_as_user?: string, properties?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getTask.');
@@ -1429,8 +1431,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1469,15 +1471,15 @@ export class DefaultService {
      * Get the values of the specified custom properties for the task, or the values of all of the properties if none are specified.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param names A comma-separated list of the names for the custom properties of the task for which you want to get values. If you do not specify the Names parameter, the response contains values for all of the custom properties for the task.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getTaskCustomProperties.');
@@ -1495,8 +1497,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1535,15 +1537,15 @@ export class DefaultService {
      * Get the values of the specified environment variables for the task, or the values of all of the environment variables if none are specified.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param names A comma-separated list of the names for the environment variables in the task for which you want to get values. If you do not specify the Names parameter, the response contains values for all of the environment variables for the task. If an environment variable with a specified name does not exist for the task, the response contains an empty string for the value of that environment variable.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
+    public getTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
+    public getTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
+    public getTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, names?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getTaskEnvironmentVariables.');
@@ -1561,8 +1563,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1600,7 +1602,7 @@ export class DefaultService {
      * Get Task List
      * Get the values of the properties for all of the tasks in the specified job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties A comma-separated list of the names for the properties of the tasks for which you want to get values. See [ISchedulerTask](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897577(v&#x3D;vs.85)) for avaialbe properties.
      * @param expandParametric Specifies whether to get properties only for the master task for a parametric sweep task, or for all of the subtasks instead. True indicates that you want to get properties for all of the subtasks. False indicates that you want to get properties only for the master task.
      * @param filter Filter tasks by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;, and multiple filters can be ANDed like \&quot;&lt;filter1&gt;%20and%20&lt;filter2&gt;…\&quot;. Available filter names are _TaskState_, _ChangeTimeFrom_, _TaskStates_, _TaskIds_ and _TaskInstanceIds_. 
@@ -1610,10 +1612,10 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTasks(jobId: number, xMsAsUser?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getTasks(jobId: number, xMsAsUser?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getTasks(jobId: number, xMsAsUser?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getTasks(jobId: number, xMsAsUser?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getTasks.');
@@ -1647,8 +1649,8 @@ export class DefaultService {
         }
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1686,14 +1688,14 @@ export class DefaultService {
      * Requeue Job
      * Resubmit the specified job to the queue.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public requeueJob(jobId: number, xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public requeueJob(jobId: number, xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public requeueJob(jobId: number, xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public requeueJob(jobId: number, xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public requeueJob(jobId: number, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public requeueJob(jobId: number, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public requeueJob(jobId: number, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public requeueJob(jobId: number, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling requeueJob.');
@@ -1701,8 +1703,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1742,14 +1744,14 @@ export class DefaultService {
      * @param jobId Job Id
      * @param taskId Task Id
      * @param subtaskId Subtask Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public requeueSubtask(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling requeueSubtask.');
@@ -1765,8 +1767,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1805,15 +1807,15 @@ export class DefaultService {
      * Move a failed, canceled, or queued task to the configuring state so that the task can be queued again when the job is resubmitted.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param message A message for the operation.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public requeueTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public requeueTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public requeueTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public requeueTask(jobId: number, taskId: number, xMsAsUser?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public requeueTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public requeueTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public requeueTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public requeueTask(jobId: number, taskId: number, x_ms_as_user?: string, message?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling requeueTask.');
@@ -1826,8 +1828,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1869,15 +1871,15 @@ export class DefaultService {
      * Set Job Custom Properties
      * Set the values of custom properties for a job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Custom properties for the job
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setJobCustomProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setJobCustomProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setJobCustomProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setJobCustomProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setJobCustomProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setJobCustomProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setJobCustomProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setJobCustomProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setJobCustomProperties.');
@@ -1886,8 +1888,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1929,15 +1931,15 @@ export class DefaultService {
      * Set Job Environment Variables
      * Sets the values of environment variables for a job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Environment variables for the job
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setJobEnvironmentVariables(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setJobEnvironmentVariables(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setJobEnvironmentVariables(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setJobEnvironmentVariables(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setJobEnvironmentVariables(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setJobEnvironmentVariables.');
@@ -1946,8 +1948,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -1989,15 +1991,15 @@ export class DefaultService {
      * Set Job Properties
      * Set the values for the properties of the specified job.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Properties of job to set
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setJobProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setJobProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setJobProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setJobProperties(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setJobProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setJobProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setJobProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setJobProperties(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setJobProperties.');
@@ -2006,8 +2008,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -2051,15 +2053,15 @@ export class DefaultService {
      * @param jobId Job Id
      * @param taskId Task Id
      * @param subtaskId Subtask Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Properties of subtask to set.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setSubtaskProperties(jobId: number, taskId: number, subtaskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setSubtaskProperties.');
@@ -2076,8 +2078,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -2120,15 +2122,15 @@ export class DefaultService {
      * Set the values of custom properties for a task.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Custom properties for the task
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setTaskCustomProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setTaskCustomProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setTaskCustomProperties.');
@@ -2141,8 +2143,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -2185,15 +2187,15 @@ export class DefaultService {
      * Set the value of one or more environment variables for a task.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Environment variables for the task
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setTaskEnvironmentVariables(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setTaskEnvironmentVariables(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setTaskEnvironmentVariables.');
@@ -2206,8 +2208,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -2250,15 +2252,15 @@ export class DefaultService {
      * Set the values of properties for a task in a job.
      * @param jobId Job Id
      * @param taskId Task Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Properties of task to set.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public setTaskProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public setTaskProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public setTaskProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public setTaskProperties(jobId: number, taskId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public setTaskProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public setTaskProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public setTaskProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public setTaskProperties(jobId: number, taskId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling setTaskProperties.');
@@ -2271,8 +2273,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required
@@ -2314,15 +2316,15 @@ export class DefaultService {
      * Submit Job
      * Submit a job to the HPC Job Scheduler Service so that the HPC Job Scheduler Service can add the job to the queue of jobs to run. If the credentials for the account under which the job should run are not cached on the server, you can set them in the UserName and Password properties. A job that is submitted by this operation is not validated. After the job is submitted, you can get information about the job by using the Get Job operation.
      * @param jobId Job Id
-     * @param xMsAsUser The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param properties Properties of job to submit
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public submitJob(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public submitJob(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public submitJob(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public submitJob(jobId: number, xMsAsUser?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public submitJob(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public submitJob(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public submitJob(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public submitJob(jobId: number, x_ms_as_user?: string, properties?: Array<RestProperty>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling submitJob.');
@@ -2331,8 +2333,8 @@ export class DefaultService {
 
 
         let headers = this.defaultHeaders;
-        if (xMsAsUser !== undefined && xMsAsUser !== null) {
-            headers = headers.set('x-ms-as-user', String(xMsAsUser));
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
         }
 
         // authentication (basic) required

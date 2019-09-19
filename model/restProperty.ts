@@ -12,6 +12,6 @@
 
 
 export interface RestProperty { 
-    name?: string;
-    value?: string;
+    Name?: string;
+    Value?: string;
 }
