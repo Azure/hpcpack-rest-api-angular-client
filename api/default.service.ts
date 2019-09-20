@@ -1685,6 +1685,66 @@ export class DefaultService {
     }
 
     /**
+     * Perform Operations on Nodes
+     * Perform operations, such as take nodes online/offline, on nodes.
+     * @param operation The operation to do.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param nodeNames 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (operation === null || operation === undefined) {
+            throw new Error('Required parameter operation was null or undefined when calling operateNodes.');
+        }
+
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<any>(`${this.basePath}/nodes/operations/${encodeURIComponent(String(operation))}`,
+            nodeNames,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Requeue Job
      * Resubmit the specified job to the queue.
      * @param jobId Job Id
