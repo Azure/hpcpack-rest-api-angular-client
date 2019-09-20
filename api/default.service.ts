@@ -1688,20 +1688,23 @@ export class DefaultService {
      * Perform Operations on Nodes
      * Perform operations, such as take nodes online/offline, on nodes.
      * @param operation The operation to do.
-     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param nodeNames 
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public operateNodes(operation: 'online' | 'offline', x_ms_as_user?: string, nodeNames?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (operation === null || operation === undefined) {
             throw new Error('Required parameter operation was null or undefined when calling operateNodes.');
         }
 
+        if (nodeNames === null || nodeNames === undefined) {
+            throw new Error('Required parameter nodeNames was null or undefined when calling operateNodes.');
+        }
 
 
         let headers = this.defaultHeaders;
