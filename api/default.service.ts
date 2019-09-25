@@ -1257,6 +1257,7 @@ export class DefaultService {
      * Get Node List
      * Get the values of the specified properties for all of the nodes in an HPC cluster.
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param nodeNames A comma-separated list of names for which the node info will be retrieved. When this parameter is specified, all other parameters except the \&quot;x-ms-as-user\&quot; header are ignored. All properties of a node will be retrieved. When an invalid name is present, or when any exception happens, no node info for that name will be returned. So the the result length may be less than the one of the input name array. 
      * @param properties A comma-separated list of the names for the properties of the nodes for which you want to get values. If you do not specify the Properties parameter, the response contains values for all of the available properties of the nodes. See [ISchedulerNode](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897552(v&#x3D;vs.85)) for available properties.
      * @param filter Filter result by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;. Now the only available filter is _NodeState_. 
      * @param sortNodesBy A node property by which nodes will be sorted. If this parameter is not specified or a property with a specified name does not exist for a node, the result will be sorted by node Id.
@@ -1265,10 +1266,11 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getNodes(x_ms_as_user?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -1277,6 +1279,9 @@ export class DefaultService {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (nodeNames !== undefined && nodeNames !== null) {
+            queryParameters = queryParameters.set('nodeNames', <any>nodeNames);
+        }
         if (properties !== undefined && properties !== null) {
             queryParameters = queryParameters.set('properties', <any>properties);
         }
