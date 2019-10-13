@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { NodeMetric } from '../model/nodeMetric';
 import { RestObject } from '../model/restObject';
 import { RestProperty } from '../model/restProperty';
 
@@ -1245,6 +1246,60 @@ export class DefaultService {
 
         return this.httpClient.get<Array<RestObject>>(`${this.basePath}/nodes/groups`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Node Metrics
+     * Get metrics of nodes
+     * @param metricNames A comma separated names of metrics, available names are HPCCpuUsage, HPCMemoryPaging, HPCDiskThroughput, HPCNetwork and HPCCoresInUse
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getNodeMetrics(metricNames: string, observe?: 'body', reportProgress?: boolean): Observable<Array<NodeMetric>>;
+    public getNodeMetrics(metricNames: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<NodeMetric>>>;
+    public getNodeMetrics(metricNames: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<NodeMetric>>>;
+    public getNodeMetrics(metricNames: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (metricNames === null || metricNames === undefined) {
+            throw new Error('Required parameter metricNames was null or undefined when calling getNodeMetrics.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (metricNames !== undefined && metricNames !== null) {
+            queryParameters = queryParameters.set('metricNames', <any>metricNames);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<NodeMetric>>(`${this.basePath}/nodes/metrics`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
