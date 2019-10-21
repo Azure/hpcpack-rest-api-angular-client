@@ -21,6 +21,7 @@ import { Observable }                                        from 'rxjs';
 import { NodeMetric } from '../model/nodeMetric';
 import { RestObject } from '../model/restObject';
 import { RestProperty } from '../model/restProperty';
+import { UserRole } from '../model/userRole';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -1736,6 +1737,54 @@ export class DefaultService {
         return this.httpClient.get<Array<RestObject>>(`${this.basePath}/jobs/${encodeURIComponent(String(jobId))}/tasks`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster User Roles
+     * Get the roles of the cluster user who makes the API call.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getUserRoles(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<UserRole>>;
+    public getUserRoles(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<UserRole>>>;
+    public getUserRoles(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<UserRole>>>;
+    public getUserRoles(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<UserRole>>(`${this.basePath}/cluster/userRoles`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
