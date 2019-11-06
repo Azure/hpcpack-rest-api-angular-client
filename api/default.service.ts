@@ -18,6 +18,8 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { MetricData } from '../model/metricData';
+import { NodeAvailability } from '../model/nodeAvailability';
 import { NodeMetric } from '../model/nodeMetric';
 import { RestObject } from '../model/restObject';
 import { RestProperty } from '../model/restProperty';
@@ -732,6 +734,102 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<string>(`${this.basePath}/cluster/info/dateTimeFormat`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster Job Metrics
+     * Get cluster job metrics for the last 7 days.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterJobMetrics(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<MetricData>;
+    public getClusterJobMetrics(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MetricData>>;
+    public getClusterJobMetrics(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MetricData>>;
+    public getClusterJobMetrics(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<MetricData>(`${this.basePath}/cluster/metrics/jobs`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster Node Availability
+     * Get cluster node availability.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterNodeAvailability(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<NodeAvailability>;
+    public getClusterNodeAvailability(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeAvailability>>;
+    public getClusterNodeAvailability(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeAvailability>>;
+    public getClusterNodeAvailability(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<NodeAvailability>(`${this.basePath}/cluster/nodeAvailability`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
