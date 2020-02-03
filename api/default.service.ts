@@ -1126,15 +1126,19 @@ export class DefaultService {
      * @param owner The user who created, submitted, or queued the job.
      * @param filter Filter jobs by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;, and multiple filters can be ANDed like \&quot;&lt;filter1&gt;%20and%20&lt;filter2&gt;…\&quot;. Available filter names are _JobState_, _NodeGroup_ and _ChangeTimeFrom_. 
      * @param sortJobsBy A job property by which jobs will be sorted. If this parameter is not specified or a property with a specified name does not exist for a job, the result will be sorted by job Id.
+     * @param asc Specifies the sort order.
+     * @param startRow Specifies the start number of rows to read. The number of the first row is 0. When this parameter presents, pagination is activated and _queryId_ is ignored. And the total number of rows will be returned in the response header _x-ms-row-count_, while no _x-ms-continuation-queryId_ will be returned.
      * @param rowsPerRead Specifies how many rows of data to retrieve each time.
      * @param queryId The value of the _x-ms-continuation-queryId_ header from the previouse response of this operation, used for reading the next page of data.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getJobs(x_ms_as_user?: string, properties?: string, owner?: string, filter?: string, sortJobsBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
 
 
 
@@ -1155,6 +1159,12 @@ export class DefaultService {
         }
         if (sortJobsBy !== undefined && sortJobsBy !== null) {
             queryParameters = queryParameters.set('sortJobsBy', <any>sortJobsBy);
+        }
+        if (asc !== undefined && asc !== null) {
+            queryParameters = queryParameters.set('asc', <any>asc);
+        }
+        if (startRow !== undefined && startRow !== null) {
+            queryParameters = queryParameters.set('startRow', <any>startRow);
         }
         if (rowsPerRead !== undefined && rowsPerRead !== null) {
             queryParameters = queryParameters.set('rowsPerRead', <any>rowsPerRead);
@@ -1415,15 +1425,19 @@ export class DefaultService {
      * @param properties A comma-separated list of the names for the properties of the nodes for which you want to get values. If you do not specify the Properties parameter, the response contains values for all of the available properties of the nodes. See [ISchedulerNode](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897552(v&#x3D;vs.85)) for available properties.
      * @param filter Filter result by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;. Now the only available filter is _NodeState_. 
      * @param sortNodesBy A node property by which nodes will be sorted. If this parameter is not specified or a property with a specified name does not exist for a node, the result will be sorted by node Id.
+     * @param asc Specifies the sort order.
+     * @param startRow Specifies the start number of rows to read. The number of the first row is 0. When this parameter presents, pagination is activated and _queryId_ is ignored. And the total number of rows will be returned in the response header _x-ms-row-count_, while no _x-ms-continuation-queryId_ will be returned.
      * @param rowsPerRead Specifies how many rows of data to retrieve each time.
      * @param queryId The value of the _x-ms-continuation-queryId_ header from the previouse response of this operation, used for reading the next page of data.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getNodes(x_ms_as_user?: string, nodeNames?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
 
 
 
@@ -1444,6 +1458,12 @@ export class DefaultService {
         }
         if (sortNodesBy !== undefined && sortNodesBy !== null) {
             queryParameters = queryParameters.set('sortNodesBy', <any>sortNodesBy);
+        }
+        if (asc !== undefined && asc !== null) {
+            queryParameters = queryParameters.set('asc', <any>asc);
+        }
+        if (startRow !== undefined && startRow !== null) {
+            queryParameters = queryParameters.set('startRow', <any>startRow);
         }
         if (rowsPerRead !== undefined && rowsPerRead !== null) {
             queryParameters = queryParameters.set('rowsPerRead', <any>rowsPerRead);
@@ -1766,19 +1786,23 @@ export class DefaultService {
      * @param expandParametric Specifies whether to get properties only for the master task for a parametric sweep task, or for all of the subtasks instead. True indicates that you want to get properties for all of the subtasks. False indicates that you want to get properties only for the master task.
      * @param filter Filter tasks by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;, and multiple filters can be ANDed like \&quot;&lt;filter1&gt;%20and%20&lt;filter2&gt;…\&quot;. Available filter names are _TaskState_, _ChangeTimeFrom_, _TaskStates_, _TaskIds_ and _TaskInstanceIds_. 
      * @param sortTasksBy A task property by which tasks will be sorted. If this parameter is not specified or a property with a specified name does not exist for a task, the result will be sorted by task Id.
+     * @param asc Specifies the sort order.
+     * @param startRow Specifies the start number of rows to read. The number of the first row is 0. When this parameter presents, pagination is activated and _queryId_ is ignored. And the total number of rows will be returned in the response header _x-ms-row-count_, while no _x-ms-continuation-queryId_ will be returned.
      * @param rowsPerRead Specifies how many rows of data to retrieve each time.
      * @param queryId The value of the _x-ms-continuation-queryId_ header from the previouse response of this operation, used for reading the next page of data.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getTasks(jobId: number, x_ms_as_user?: string, properties?: string, expandParametric?: boolean, filter?: string, sortTasksBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (jobId === null || jobId === undefined) {
             throw new Error('Required parameter jobId was null or undefined when calling getTasks.');
         }
+
+
 
 
 
@@ -1799,6 +1823,12 @@ export class DefaultService {
         }
         if (sortTasksBy !== undefined && sortTasksBy !== null) {
             queryParameters = queryParameters.set('sortTasksBy', <any>sortTasksBy);
+        }
+        if (asc !== undefined && asc !== null) {
+            queryParameters = queryParameters.set('asc', <any>asc);
+        }
+        if (startRow !== undefined && startRow !== null) {
+            queryParameters = queryParameters.set('startRow', <any>startRow);
         }
         if (rowsPerRead !== undefined && rowsPerRead !== null) {
             queryParameters = queryParameters.set('rowsPerRead', <any>rowsPerRead);
