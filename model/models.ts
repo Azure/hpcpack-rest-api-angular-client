@@ -1,4 +1,5 @@
 export * from './metricData';
+export * from './metricDefinition';
 export * from './metricInstanceData';
 export * from './metricInstanceDataValues';
 export * from './nodeAvailability';

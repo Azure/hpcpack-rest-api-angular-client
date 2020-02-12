@@ -19,6 +19,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { MetricData } from '../model/metricData';
+import { MetricDefinition } from '../model/metricDefinition';
 import { NodeAvailability } from '../model/nodeAvailability';
 import { NodeMetric } from '../model/nodeMetric';
 import { RestObject } from '../model/restObject';
@@ -783,6 +784,126 @@ export class DefaultService {
 
         return this.httpClient.get<MetricData>(`${this.basePath}/cluster/metrics/jobs`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get cluster metric definitions
+     * Get cluster metric definitions. You can then get the history of a metric.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterMetricDefintions(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<MetricDefinition>>;
+    public getClusterMetricDefintions(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<MetricDefinition>>>;
+    public getClusterMetricDefintions(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<MetricDefinition>>>;
+    public getClusterMetricDefintions(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<MetricDefinition>>(`${this.basePath}/cluster/metrics/definitions`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get cluster metric history
+     * Get cluster metric history
+     * @param name Metric name
+     * @param fromTime The start time in UTC
+     * @param toTime The end time in UTC
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterMetricHistory(name: string, fromTime: Date, toTime: Date, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<MetricData>;
+    public getClusterMetricHistory(name: string, fromTime: Date, toTime: Date, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MetricData>>;
+    public getClusterMetricHistory(name: string, fromTime: Date, toTime: Date, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MetricData>>;
+    public getClusterMetricHistory(name: string, fromTime: Date, toTime: Date, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling getClusterMetricHistory.');
+        }
+
+        if (fromTime === null || fromTime === undefined) {
+            throw new Error('Required parameter fromTime was null or undefined when calling getClusterMetricHistory.');
+        }
+
+        if (toTime === null || toTime === undefined) {
+            throw new Error('Required parameter toTime was null or undefined when calling getClusterMetricHistory.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (fromTime !== undefined && fromTime !== null) {
+            queryParameters = queryParameters.set('fromTime', <any>fromTime.toISOString());
+        }
+        if (toTime !== undefined && toTime !== null) {
+            queryParameters = queryParameters.set('toTime', <any>toTime.toISOString());
+        }
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<MetricData>(`${this.basePath}/cluster/metrics/history/${encodeURIComponent(String(name))}`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
