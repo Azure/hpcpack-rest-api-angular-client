@@ -3,6 +3,8 @@ export * from './metricDefinition';
 export * from './metricInstanceData';
 export * from './metricInstanceDataValues';
 export * from './nodeAvailability';
+export * from './nodeGroup';
+export * from './nodeGroupOperation';
 export * from './nodeMetric';
 export * from './restObject';
 export * from './restProperty';

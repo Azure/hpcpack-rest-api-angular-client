@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 import { MetricData } from '../model/metricData';
 import { MetricDefinition } from '../model/metricDefinition';
 import { NodeAvailability } from '../model/nodeAvailability';
+import { NodeGroup } from '../model/nodeGroup';
+import { NodeGroupOperation } from '../model/nodeGroupOperation';
 import { NodeMetric } from '../model/nodeMetric';
 import { RestObject } from '../model/restObject';
 import { RestProperty } from '../model/restProperty';
@@ -444,6 +446,114 @@ export class DefaultService {
 
         return this.httpClient.post<number>(`${this.basePath}/jobs/jobFile`,
             xml,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Create a Node Group
+     * Create a Node Group
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param nodeGroup 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createNodeGroup(x_ms_as_user?: string, nodeGroup?: NodeGroup, observe?: 'body', reportProgress?: boolean): Observable<NodeGroup>;
+    public createNodeGroup(x_ms_as_user?: string, nodeGroup?: NodeGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeGroup>>;
+    public createNodeGroup(x_ms_as_user?: string, nodeGroup?: NodeGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeGroup>>;
+    public createNodeGroup(x_ms_as_user?: string, nodeGroup?: NodeGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<NodeGroup>(`${this.basePath}/nodeGroups`,
+            nodeGroup,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Delete Node Group
+     * Delete a node group.
+     * @param id Node group ID.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public deleteNodeGroup(id: number, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteNodeGroup(id: number, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteNodeGroup(id: number, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteNodeGroup(id: number, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling deleteNodeGroup.');
+        }
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.delete<any>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1384,20 +1494,20 @@ export class DefaultService {
     }
 
     /**
-     * Get Node Group Members
-     * Get the list of the nodes that belong to the specified node group.
-     * @param name Node group name.
+     * Get Node Group
+     * Get a node group by ID.
+     * @param id Node group ID.
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
-    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
-    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
-    public getNodeGroupMembers(name: string, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getNodeGroup(id: number, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<NodeGroup>;
+    public getNodeGroup(id: number, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeGroup>>;
+    public getNodeGroup(id: number, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeGroup>>;
+    public getNodeGroup(id: number, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getNodeGroupMembers.');
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getNodeGroup.');
         }
 
 
@@ -1426,7 +1536,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<string>>(`${this.basePath}/nodes/groups/${encodeURIComponent(String(name))}`,
+        return this.httpClient.get<NodeGroup>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(id))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1443,9 +1553,9 @@ export class DefaultService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getNodeGroups(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getNodeGroups(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getNodeGroups(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
+    public getNodeGroups(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<NodeGroup>>;
+    public getNodeGroups(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<NodeGroup>>>;
+    public getNodeGroups(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<NodeGroup>>>;
     public getNodeGroups(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -1474,7 +1584,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<RestObject>>(`${this.basePath}/nodes/groups`,
+        return this.httpClient.get<Array<NodeGroup>>(`${this.basePath}/nodeGroups`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1621,6 +1731,59 @@ export class DefaultService {
         return this.httpClient.get<Array<RestObject>>(`${this.basePath}/nodes`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Nodes of a Group
+     * Get the list of the nodes that belong to the specified node group.
+     * @param id Node group ID.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getNodesOfGroup(id: number, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getNodesOfGroup(id: number, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getNodesOfGroup(id: number, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getNodesOfGroup(id: number, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getNodesOfGroup.');
+        }
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<string>>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(id))}/nodes`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -2033,6 +2196,66 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<Array<UserRole>>(`${this.basePath}/cluster/userRoles`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Add/Remove Nodes to/from a Group
+     * Add nodes to, or remove nodes from, a node group.
+     * @param id Node group ID.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param operation 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public moveNodesOfGroup(id: number, x_ms_as_user?: string, operation?: NodeGroupOperation, observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public moveNodesOfGroup(id: number, x_ms_as_user?: string, operation?: NodeGroupOperation, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public moveNodesOfGroup(id: number, x_ms_as_user?: string, operation?: NodeGroupOperation, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public moveNodesOfGroup(id: number, x_ms_as_user?: string, operation?: NodeGroupOperation, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling moveNodesOfGroup.');
+        }
+
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.patch<Array<string>>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(id))}/nodes`,
+            operation,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -2784,6 +3007,66 @@ export class DefaultService {
 
         return this.httpClient.post<any>(`${this.basePath}/jobs/${encodeURIComponent(String(jobId))}/submit`,
             properties,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update Node Group
+     * Update a node group.
+     * @param id Node group ID.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param nodeGroup 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateNodeGroup(id: number, x_ms_as_user?: string, nodeGroup?: NodeGroup, observe?: 'body', reportProgress?: boolean): Observable<NodeGroup>;
+    public updateNodeGroup(id: number, x_ms_as_user?: string, nodeGroup?: NodeGroup, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeGroup>>;
+    public updateNodeGroup(id: number, x_ms_as_user?: string, nodeGroup?: NodeGroup, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeGroup>>;
+    public updateNodeGroup(id: number, x_ms_as_user?: string, nodeGroup?: NodeGroup, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling updateNodeGroup.');
+        }
+
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.put<NodeGroup>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(id))}`,
+            nodeGroup,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
