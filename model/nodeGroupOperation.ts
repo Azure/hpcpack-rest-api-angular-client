@@ -12,7 +12,7 @@
 
 
 export interface NodeGroupOperation { 
-    GroupId?: number;
+    GroupName?: string;
     Operation?: NodeGroupOperation.OperationEnum;
     NodeNames?: Array<string>;
 }

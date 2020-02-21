@@ -12,7 +12,6 @@
 
 
 export interface NodeGroup { 
-    Id?: number;
     Name?: string;
     Description?: string;
     Managed?: boolean;
