@@ -6,6 +6,8 @@ export * from './nodeAvailability';
 export * from './nodeGroup';
 export * from './nodeGroupOperation';
 export * from './nodeMetric';
+export * from './operationLog';
+export * from './operationLogEntry';
 export * from './restObject';
 export * from './restProperty';
 export * from './userRole';

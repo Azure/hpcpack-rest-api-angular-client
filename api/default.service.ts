@@ -24,6 +24,7 @@ import { NodeAvailability } from '../model/nodeAvailability';
 import { NodeGroup } from '../model/nodeGroup';
 import { NodeGroupOperation } from '../model/nodeGroupOperation';
 import { NodeMetric } from '../model/nodeMetric';
+import { OperationLog } from '../model/operationLog';
 import { RestObject } from '../model/restObject';
 import { RestProperty } from '../model/restProperty';
 import { UserRole } from '../model/userRole';
@@ -1061,6 +1062,107 @@ export class DefaultService {
         ];
 
         return this.httpClient.get<NodeAvailability>(`${this.basePath}/cluster/nodeAvailability`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster Operation Log by ID
+     * Get cluster operation log by ID.
+     * @param id Operation ID
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterOperation(id: string, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<OperationLog>;
+    public getClusterOperation(id: string, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationLog>>;
+    public getClusterOperation(id: string, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationLog>>;
+    public getClusterOperation(id: string, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling getClusterOperation.');
+        }
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<OperationLog>(`${this.basePath}/cluster/operations/${encodeURIComponent(String(id))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster Operation Logs
+     * Get cluster operation logs.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterOperations(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<OperationLog>>;
+    public getClusterOperations(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OperationLog>>>;
+    public getClusterOperations(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OperationLog>>>;
+    public getClusterOperations(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<OperationLog>>(`${this.basePath}/cluster/operations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
