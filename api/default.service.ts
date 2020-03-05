@@ -856,6 +856,72 @@ export class DefaultService {
     }
 
     /**
+     * Get the First Cluster Operation Log in Time Order
+     * Get the first cluster operation log in time order, optionally under given conditions.
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param fromTime The start time(exclusive) in UTC
+     * @param toTime The end time(exclusive) in UTC
+     * @param nodeNames A comma-separated list of names for which the logs will be retrieved.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterFirstOperation(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, observe?: 'body', reportProgress?: boolean): Observable<OperationLog>;
+    public getClusterFirstOperation(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationLog>>;
+    public getClusterFirstOperation(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationLog>>;
+    public getClusterFirstOperation(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (fromTime !== undefined && fromTime !== null) {
+            queryParameters = queryParameters.set('fromTime', <any>fromTime.toISOString());
+        }
+        if (toTime !== undefined && toTime !== null) {
+            queryParameters = queryParameters.set('toTime', <any>toTime.toISOString());
+        }
+        if (nodeNames !== undefined && nodeNames !== null) {
+            queryParameters = queryParameters.set('nodeNames', <any>nodeNames);
+        }
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<OperationLog>(`${this.basePath}/cluster/operations/first`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Cluster Job Metrics
      * Get cluster job metrics for the last 7 days.
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
