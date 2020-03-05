@@ -1128,14 +1128,36 @@ export class DefaultService {
      * Get Cluster Operation Logs
      * Get cluster operation logs.
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param fromTime The start time(exclusive) in UTC
+     * @param toTime The end time(exclusive) in UTC
+     * @param nodeNames A comma-separated list of names for which the logs will be retrieved.
+     * @param withDetail Whether to include the \&quot;Entries\&quot; property for each log. By deafult no \&quot;Entries\&quot; will be returned. 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterOperations(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<OperationLog>>;
-    public getClusterOperations(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OperationLog>>>;
-    public getClusterOperations(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OperationLog>>>;
-    public getClusterOperations(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<OperationLog>>;
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OperationLog>>>;
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OperationLog>>>;
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
+
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (fromTime !== undefined && fromTime !== null) {
+            queryParameters = queryParameters.set('fromTime', <any>fromTime.toISOString());
+        }
+        if (toTime !== undefined && toTime !== null) {
+            queryParameters = queryParameters.set('toTime', <any>toTime.toISOString());
+        }
+        if (nodeNames !== undefined && nodeNames !== null) {
+            queryParameters = queryParameters.set('nodeNames', <any>nodeNames);
+        }
+        if (withDetail !== undefined && withDetail !== null) {
+            queryParameters = queryParameters.set('withDetail', <any>withDetail);
+        }
 
         let headers = this.defaultHeaders;
         if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
@@ -1164,6 +1186,7 @@ export class DefaultService {
 
         return this.httpClient.get<Array<OperationLog>>(`${this.basePath}/cluster/operations`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
