@@ -9,12 +9,15 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { NodeHealth } from './nodeHealth';
+import { NodeServiceRole } from './nodeServiceRole';
+import { NodeState } from './nodeState';
 
 
 export interface Node { 
     Name?: string;
-    State?: Node.StateEnum;
-    Health?: Node.HealthEnum;
+    State?: NodeState;
+    Health?: NodeHealth;
     Template?: string;
     Location?: string;
     MemorySize?: number;
@@ -24,29 +27,6 @@ export interface Node {
     OnAzure?: boolean;
     Groups?: Array<string>;
     Roles?: Array<string>;
-    InstalledServiceRoles?: Array<string>;
-    ActiveServiceRoles?: Array<string>;
-}
-export namespace Node {
-    export type StateEnum = 'Unknown' | 'Provisioning' | 'Offline' | 'Starting' | 'Online' | 'Draining' | 'Rejected' | 'Removing' | 'NotDeployed' | 'Stopping';
-    export const StateEnum = {
-        Unknown: 'Unknown' as StateEnum,
-        Provisioning: 'Provisioning' as StateEnum,
-        Offline: 'Offline' as StateEnum,
-        Starting: 'Starting' as StateEnum,
-        Online: 'Online' as StateEnum,
-        Draining: 'Draining' as StateEnum,
-        Rejected: 'Rejected' as StateEnum,
-        Removing: 'Removing' as StateEnum,
-        NotDeployed: 'NotDeployed' as StateEnum,
-        Stopping: 'Stopping' as StateEnum
-    };
-    export type HealthEnum = 'OK' | 'Warning' | 'Error' | 'Transitional' | 'Unapproved';
-    export const HealthEnum = {
-        OK: 'OK' as HealthEnum,
-        Warning: 'Warning' as HealthEnum,
-        Error: 'Error' as HealthEnum,
-        Transitional: 'Transitional' as HealthEnum,
-        Unapproved: 'Unapproved' as HealthEnum
-    };
+    InstalledServiceRoles?: Array<NodeServiceRole>;
+    ActiveServiceRoles?: Array<NodeServiceRole>;
 }
