@@ -2,6 +2,7 @@ export * from './metricData';
 export * from './metricDefinition';
 export * from './metricInstanceData';
 export * from './metricInstanceDataValues';
+export * from './node';
 export * from './nodeAvailability';
 export * from './nodeGroup';
 export * from './nodeGroupOperation';

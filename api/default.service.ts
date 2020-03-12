@@ -20,6 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { MetricData } from '../model/metricData';
 import { MetricDefinition } from '../model/metricDefinition';
+import { Node } from '../model/node';
 import { NodeAvailability } from '../model/nodeAvailability';
 import { NodeGroup } from '../model/nodeGroup';
 import { NodeGroupOperation } from '../model/nodeGroupOperation';
@@ -1090,6 +1091,59 @@ export class DefaultService {
     }
 
     /**
+     * Get Cluster Node by Name
+     * 
+     * @param name Node name
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterNode(name: string, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Node>;
+    public getClusterNode(name: string, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Node>>;
+    public getClusterNode(name: string, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Node>>;
+    public getClusterNode(name: string, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling getClusterNode.');
+        }
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Node>(`${this.basePath}/cluster/nodes/${encodeURIComponent(String(name))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
      * Get Cluster Node Availability
      * Get cluster node availability.
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
@@ -1129,6 +1183,72 @@ export class DefaultService {
 
         return this.httpClient.get<NodeAvailability>(`${this.basePath}/cluster/nodeAvailability`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster Nodes
+     * 
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param names A comma-separated list of node names.
+     * @param jobs A comma-separated list of job ids.
+     * @param group A node group name.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Node>>;
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Node>>>;
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Node>>>;
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (names !== undefined && names !== null) {
+            queryParameters = queryParameters.set('names', <any>names);
+        }
+        if (jobs !== undefined && jobs !== null) {
+            queryParameters = queryParameters.set('jobs', <any>jobs);
+        }
+        if (group !== undefined && group !== null) {
+            queryParameters = queryParameters.set('group', <any>group);
+        }
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<Array<Node>>(`${this.basePath}/cluster/nodes`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -2457,6 +2577,65 @@ export class DefaultService {
 
         return this.httpClient.patch<Array<string>>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(name))}/nodes`,
             operation,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Operate a Cluster Node
+     * The requested operation will be performed asynchronously. The API doesn&#39;t ensure it&#39;s successfully on return. The caller has to query the node state for the operation result. 
+     * @param name Node name
+     * @param operation 
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public operateClusterNode(name: string, operation: 'start' | 'stop' | 'reboot' | 'shutdown' | 'bringOnline' | 'takeOffline', x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public operateClusterNode(name: string, operation: 'start' | 'stop' | 'reboot' | 'shutdown' | 'bringOnline' | 'takeOffline', x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public operateClusterNode(name: string, operation: 'start' | 'stop' | 'reboot' | 'shutdown' | 'bringOnline' | 'takeOffline', x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public operateClusterNode(name: string, operation: 'start' | 'stop' | 'reboot' | 'shutdown' | 'bringOnline' | 'takeOffline', x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (name === null || name === undefined) {
+            throw new Error('Required parameter name was null or undefined when calling operateClusterNode.');
+        }
+
+        if (operation === null || operation === undefined) {
+            throw new Error('Required parameter operation was null or undefined when calling operateClusterNode.');
+        }
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.post<any>(`${this.basePath}/cluster/nodes/${encodeURIComponent(String(name))}/operations/${encodeURIComponent(String(operation))}`,
+            null,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
