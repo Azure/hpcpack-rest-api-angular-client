@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { NodeHealth } from './nodeHealth';
 
 
 export interface NodeStatOfHealth { 
-    Name?: NodeHealth;
-    Value?: number;
+  [key: string]: number;
+
+
 }

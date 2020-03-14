@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { NodeState } from './nodeState';
 
 
 export interface NodeStatOfState { 
-    Name?: NodeState;
-    Value?: number;
+  [key: string]: number;
+
+
 }
