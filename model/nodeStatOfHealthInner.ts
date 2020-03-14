@@ -13,6 +13,6 @@ import { NodeHealth } from './nodeHealth';
 
 
 export interface NodeStatOfHealthInner { 
-    name?: NodeHealth;
-    value?: number;
+    Name?: NodeHealth;
+    Value?: number;
 }

@@ -13,6 +13,6 @@ import { NodeState } from './nodeState';
 
 
 export interface NodeStatOfStateInner { 
-    name?: NodeState;
-    value?: number;
+    Name?: NodeState;
+    Value?: number;
 }
