@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { NodeStatOfStateInner } from './nodeStatOfStateInner';
+import { NodeState } from './nodeState';
 
 
-export interface NodeStatOfState extends Array<NodeStatOfStateInner> { 
+export interface NodeStatOfStateInner { 
+    name?: NodeState;
+    value?: number;
 }
