@@ -9,6 +9,7 @@ export * from './nodeGroupOperation';
 export * from './nodeHealth';
 export * from './nodeMetric';
 export * from './nodeServiceRole';
+export * from './nodeStatOfHealth';
 export * from './nodeStatOfState';
 export * from './nodeState';
 export * from './operationLog';

@@ -25,6 +25,7 @@ import { NodeAvailability } from '../model/nodeAvailability';
 import { NodeGroup } from '../model/nodeGroup';
 import { NodeGroupOperation } from '../model/nodeGroupOperation';
 import { NodeMetric } from '../model/nodeMetric';
+import { NodeStatOfHealth } from '../model/nodeStatOfHealth';
 import { NodeStatOfState } from '../model/nodeStatOfState';
 import { OperationLog } from '../model/operationLog';
 import { RestObject } from '../model/restObject';
@@ -1193,16 +1194,16 @@ export class DefaultService {
     }
 
     /**
-     * Get Cluster Node Stat
+     * Get Cluster Node Stat of Health
      * 
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterNodeStat(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<NodeStatOfState>;
-    public getClusterNodeStat(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeStatOfState>>;
-    public getClusterNodeStat(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeStatOfState>>;
-    public getClusterNodeStat(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterNodeStatOfHealth(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<NodeStatOfHealth>;
+    public getClusterNodeStatOfHealth(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeStatOfHealth>>;
+    public getClusterNodeStatOfHealth(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeStatOfHealth>>;
+    public getClusterNodeStatOfHealth(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;
@@ -1230,7 +1231,55 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<NodeStatOfState>(`${this.basePath}/cluster/nodes/stat`,
+        return this.httpClient.get<NodeStatOfHealth>(`${this.basePath}/cluster/nodes/stats/health`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Get Cluster Node Stat of State
+     * 
+     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getClusterNodeStatOfState(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<NodeStatOfState>;
+    public getClusterNodeStatOfState(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeStatOfState>>;
+    public getClusterNodeStatOfState(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeStatOfState>>;
+    public getClusterNodeStatOfState(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+        let headers = this.defaultHeaders;
+        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
+            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
+        }
+
+        // authentication (basic) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json',
+            'application/xml'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+
+        return this.httpClient.get<NodeStatOfState>(`${this.basePath}/cluster/nodes/stats/state`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1247,13 +1296,17 @@ export class DefaultService {
      * @param names A comma-separated list of node names.
      * @param jobs A comma-separated list of job ids.
      * @param group A node group name.
+     * @param state Node state.
+     * @param health Node health.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Node>>;
-    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Node>>>;
-    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Node>>>;
-    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, state?: 'Unknown' | 'Provisioning' | 'Offline' | 'Starting' | 'Online' | 'Draining' | 'Rejected' | 'Removing' | 'NotDeployed' | 'Stopping', health?: 'OK' | 'Warning' | 'Error' | 'Transitional' | 'Unapproved', observe?: 'body', reportProgress?: boolean): Observable<Array<Node>>;
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, state?: 'Unknown' | 'Provisioning' | 'Offline' | 'Starting' | 'Online' | 'Draining' | 'Rejected' | 'Removing' | 'NotDeployed' | 'Stopping', health?: 'OK' | 'Warning' | 'Error' | 'Transitional' | 'Unapproved', observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Node>>>;
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, state?: 'Unknown' | 'Provisioning' | 'Offline' | 'Starting' | 'Online' | 'Draining' | 'Rejected' | 'Removing' | 'NotDeployed' | 'Stopping', health?: 'OK' | 'Warning' | 'Error' | 'Transitional' | 'Unapproved', observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Node>>>;
+    public getClusterNodes(x_ms_as_user?: string, names?: string, jobs?: string, group?: string, state?: 'Unknown' | 'Provisioning' | 'Offline' | 'Starting' | 'Online' | 'Draining' | 'Rejected' | 'Removing' | 'NotDeployed' | 'Stopping', health?: 'OK' | 'Warning' | 'Error' | 'Transitional' | 'Unapproved', observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
 
 
 
@@ -1268,6 +1321,12 @@ export class DefaultService {
         }
         if (group !== undefined && group !== null) {
             queryParameters = queryParameters.set('group', <any>group);
+        }
+        if (state !== undefined && state !== null) {
+            queryParameters = queryParameters.set('state', <any>state);
+        }
+        if (health !== undefined && health !== null) {
+            queryParameters = queryParameters.set('health', <any>health);
         }
 
         let headers = this.defaultHeaders;
