@@ -21,7 +21,6 @@ import { Observable }                                        from 'rxjs';
 import { MetricData } from '../model/metricData';
 import { MetricDefinition } from '../model/metricDefinition';
 import { Node } from '../model/node';
-import { NodeAvailability } from '../model/nodeAvailability';
 import { NodeGroup } from '../model/nodeGroup';
 import { NodeGroupOperation } from '../model/nodeGroupOperation';
 import { NodeMetric } from '../model/nodeMetric';
@@ -503,7 +502,7 @@ export class DefaultService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.post<NodeGroup>(`${this.basePath}/nodeGroups`,
+        return this.httpClient.post<NodeGroup>(`${this.basePath}/cluster/nodeGroups`,
             nodeGroup,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -557,7 +556,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.delete<any>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(name))}`,
+        return this.httpClient.delete<any>(`${this.basePath}/cluster/nodeGroups/${encodeURIComponent(String(name))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1146,22 +1145,27 @@ export class DefaultService {
     }
 
     /**
-     * Get Cluster Node Availability
-     * Get cluster node availability.
-     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
+     * Get Node Metrics
+     * Get metrics of nodes
+     * @param metricNames A comma separated names of metrics, available names are HPCCpuUsage, HPCMemoryPaging, HPCDiskThroughput, HPCNetwork and HPCCoresInUse
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterNodeAvailability(x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<NodeAvailability>;
-    public getClusterNodeAvailability(x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NodeAvailability>>;
-    public getClusterNodeAvailability(x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NodeAvailability>>;
-    public getClusterNodeAvailability(x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterNodeMetrics(metricNames: string, observe?: 'body', reportProgress?: boolean): Observable<Array<NodeMetric>>;
+    public getClusterNodeMetrics(metricNames: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<NodeMetric>>>;
+    public getClusterNodeMetrics(metricNames: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<NodeMetric>>>;
+    public getClusterNodeMetrics(metricNames: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
+        if (metricNames === null || metricNames === undefined) {
+            throw new Error('Required parameter metricNames was null or undefined when calling getClusterNodeMetrics.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (metricNames !== undefined && metricNames !== null) {
+            queryParameters = queryParameters.set('metricNames', <any>metricNames);
+        }
 
         let headers = this.defaultHeaders;
-        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
-            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
-        }
 
         // authentication (basic) required
         if (this.configuration.username || this.configuration.password) {
@@ -1183,8 +1187,9 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<NodeAvailability>(`${this.basePath}/cluster/nodeAvailability`,
+        return this.httpClient.get<Array<NodeMetric>>(`${this.basePath}/cluster/nodes/metrics`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -1865,59 +1870,6 @@ export class DefaultService {
     }
 
     /**
-     * Get Node by Name
-     * Get the values of all of the properties for the specified node.
-     * @param name Node name.
-     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getNodeByName(name: string, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestProperty>>;
-    public getNodeByName(name: string, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestProperty>>>;
-    public getNodeByName(name: string, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestProperty>>>;
-    public getNodeByName(name: string, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (name === null || name === undefined) {
-            throw new Error('Required parameter name was null or undefined when calling getNodeByName.');
-        }
-
-
-        let headers = this.defaultHeaders;
-        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
-            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
-        }
-
-        // authentication (basic) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-
-        return this.httpClient.get<Array<RestProperty>>(`${this.basePath}/nodes/${encodeURIComponent(String(name))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Get Node Group
      * Get a node group by name.
      * @param name Node group name.
@@ -1960,7 +1912,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<NodeGroup>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(name))}`,
+        return this.httpClient.get<NodeGroup>(`${this.basePath}/cluster/nodeGroups/${encodeURIComponent(String(name))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -2008,158 +1960,8 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<NodeGroup>>(`${this.basePath}/nodeGroups`,
+        return this.httpClient.get<Array<NodeGroup>>(`${this.basePath}/cluster/nodeGroups`,
             {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get Node Metrics
-     * Get metrics of nodes
-     * @param metricNames A comma separated names of metrics, available names are HPCCpuUsage, HPCMemoryPaging, HPCDiskThroughput, HPCNetwork and HPCCoresInUse
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getNodeMetrics(metricNames: string, observe?: 'body', reportProgress?: boolean): Observable<Array<NodeMetric>>;
-    public getNodeMetrics(metricNames: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<NodeMetric>>>;
-    public getNodeMetrics(metricNames: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<NodeMetric>>>;
-    public getNodeMetrics(metricNames: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (metricNames === null || metricNames === undefined) {
-            throw new Error('Required parameter metricNames was null or undefined when calling getNodeMetrics.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (metricNames !== undefined && metricNames !== null) {
-            queryParameters = queryParameters.set('metricNames', <any>metricNames);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // authentication (basic) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-
-        return this.httpClient.get<Array<NodeMetric>>(`${this.basePath}/nodes/metrics`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Get Node List
-     * Get the values of the specified properties for all of the nodes in an HPC cluster.
-     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
-     * @param nodeNames A comma-separated list of names for which the node info will be retrieved. When this parameter is specified, all other parameters except the \&quot;x-ms-as-user\&quot; header are ignored. All properties of a node will be retrieved. When an invalid name is present, or when any exception happens, no node info for that name will be returned. So the the result length may be less than the one of the input name array. 
-     * @param jobIds A comma-separated list of job ids. It will list nodes that have been allocated for the jobs. The list of nodes does not shrink even if the server shrinks the nodes that it allocates to your job. An invalid job id will be ignored. When this parameter is specified, all other parameters except the \&quot;x-ms-as-user\&quot; header are ignored. All properties of a node will be retrieved. 
-     * @param properties A comma-separated list of the names for the properties of the nodes for which you want to get values. If you do not specify the Properties parameter, the response contains values for all of the available properties of the nodes. See [ISchedulerNode](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/cc897552(v&#x3D;vs.85)) for available properties.
-     * @param filter Filter result by specified filters. A filter is in the form of \&quot;&lt;name&gt;%20eq%20&lt;value&gt;\&quot;. Now the only available filter is _NodeState_. 
-     * @param sortNodesBy A node property by which nodes will be sorted. If this parameter is not specified or a property with a specified name does not exist for a node, the result will be sorted by node Id.
-     * @param asc Specifies the sort order.
-     * @param startRow Specifies the start number of rows to read. The number of the first row is 0. When this parameter presents, pagination is activated and _queryId_ is ignored. And the total number of rows will be returned in the response header _x-ms-row-count_, while no _x-ms-continuation-queryId_ will be returned.
-     * @param rowsPerRead Specifies how many rows of data to retrieve each time.
-     * @param queryId The value of the _x-ms-continuation-queryId_ header from the previouse response of this operation, used for reading the next page of data.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, jobIds?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<RestObject>>;
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, jobIds?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<RestObject>>>;
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, jobIds?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<RestObject>>>;
-    public getNodes(x_ms_as_user?: string, nodeNames?: string, jobIds?: string, properties?: string, filter?: string, sortNodesBy?: string, asc?: boolean, startRow?: number, rowsPerRead?: number, queryId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-
-
-
-
-
-
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (nodeNames !== undefined && nodeNames !== null) {
-            queryParameters = queryParameters.set('nodeNames', <any>nodeNames);
-        }
-        if (jobIds !== undefined && jobIds !== null) {
-            queryParameters = queryParameters.set('jobIds', <any>jobIds);
-        }
-        if (properties !== undefined && properties !== null) {
-            queryParameters = queryParameters.set('properties', <any>properties);
-        }
-        if (filter !== undefined && filter !== null) {
-            queryParameters = queryParameters.set('$filter', <any>filter);
-        }
-        if (sortNodesBy !== undefined && sortNodesBy !== null) {
-            queryParameters = queryParameters.set('sortNodesBy', <any>sortNodesBy);
-        }
-        if (asc !== undefined && asc !== null) {
-            queryParameters = queryParameters.set('asc', <any>asc);
-        }
-        if (startRow !== undefined && startRow !== null) {
-            queryParameters = queryParameters.set('startRow', <any>startRow);
-        }
-        if (rowsPerRead !== undefined && rowsPerRead !== null) {
-            queryParameters = queryParameters.set('rowsPerRead', <any>rowsPerRead);
-        }
-        if (queryId !== undefined && queryId !== null) {
-            queryParameters = queryParameters.set('queryId', <any>queryId);
-        }
-
-        let headers = this.defaultHeaders;
-        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
-            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
-        }
-
-        // authentication (basic) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-
-        return this.httpClient.get<Array<RestObject>>(`${this.basePath}/nodes`,
-            {
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -2211,7 +2013,7 @@ export class DefaultService {
             'application/json'
         ];
 
-        return this.httpClient.get<Array<string>>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(name))}/nodes`,
+        return this.httpClient.get<Array<string>>(`${this.basePath}/cluster/nodeGroups/${encodeURIComponent(String(name))}/nodes`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -2683,7 +2485,7 @@ export class DefaultService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.patch<Array<string>>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(name))}/nodes`,
+        return this.httpClient.patch<Array<string>>(`${this.basePath}/cluster/nodeGroups/${encodeURIComponent(String(name))}/nodes`,
             operation,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -2744,69 +2546,6 @@ export class DefaultService {
 
         return this.httpClient.post<any>(`${this.basePath}/cluster/nodes/${encodeURIComponent(String(name))}/operations/${encodeURIComponent(String(operation))}`,
             null,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * Perform Operations on Nodes
-     * Perform operations, such as take nodes online/offline, on nodes.
-     * @param operation The operation to do.
-     * @param nodeNames 
-     * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public operateNodes(operation: 'online' | 'offline', nodeNames: Array<string>, x_ms_as_user?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (operation === null || operation === undefined) {
-            throw new Error('Required parameter operation was null or undefined when calling operateNodes.');
-        }
-
-        if (nodeNames === null || nodeNames === undefined) {
-            throw new Error('Required parameter nodeNames was null or undefined when calling operateNodes.');
-        }
-
-
-        let headers = this.defaultHeaders;
-        if (x_ms_as_user !== undefined && x_ms_as_user !== null) {
-            headers = headers.set('x-ms-as-user', String(x_ms_as_user));
-        }
-
-        // authentication (basic) required
-        if (this.configuration.username || this.configuration.password) {
-            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
-        }
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/xml'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.post<any>(`${this.basePath}/nodes/operations/${encodeURIComponent(String(operation))}`,
-            nodeNames,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -3553,7 +3292,7 @@ export class DefaultService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.put<NodeGroup>(`${this.basePath}/nodeGroups/${encodeURIComponent(String(name))}`,
+        return this.httpClient.put<NodeGroup>(`${this.basePath}/cluster/nodeGroups/${encodeURIComponent(String(name))}`,
             nodeGroup,
             {
                 withCredentials: this.configuration.withCredentials,
