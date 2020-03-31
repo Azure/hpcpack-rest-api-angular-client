@@ -1425,19 +1425,21 @@ export class DefaultService {
 
     /**
      * Get Cluster Operation Logs
-     * Get cluster operation logs.
+     * Get cluster operation logs in time order, with the latest log being first.
      * @param x_ms_as_user The name of user whom you want to make request as. You must be an HPC Pack administrator or HPC Pack Job administrator to make it work.
      * @param fromTime The start time(exclusive) in UTC
      * @param toTime The end time(exclusive) in UTC
+     * @param limit The max number of logs to return
      * @param nodeNames A comma-separated list of names for which the logs will be retrieved.
      * @param withDetail Whether to include the \&quot;Entries\&quot; property for each log. By deafult no \&quot;Entries\&quot; will be returned. 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<OperationLog>>;
-    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OperationLog>>>;
-    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OperationLog>>>;
-    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, nodeNames?: string, withDetail?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, limit?: number, nodeNames?: string, withDetail?: boolean, observe?: 'body', reportProgress?: boolean): Observable<Array<OperationLog>>;
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, limit?: number, nodeNames?: string, withDetail?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<OperationLog>>>;
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, limit?: number, nodeNames?: string, withDetail?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<OperationLog>>>;
+    public getClusterOperations(x_ms_as_user?: string, fromTime?: Date, toTime?: Date, limit?: number, nodeNames?: string, withDetail?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
 
 
 
@@ -1450,6 +1452,9 @@ export class DefaultService {
         }
         if (toTime !== undefined && toTime !== null) {
             queryParameters = queryParameters.set('toTime', <any>toTime.toISOString());
+        }
+        if (limit !== undefined && limit !== null) {
+            queryParameters = queryParameters.set('limit', <any>limit);
         }
         if (nodeNames !== undefined && nodeNames !== null) {
             queryParameters = queryParameters.set('nodeNames', <any>nodeNames);
