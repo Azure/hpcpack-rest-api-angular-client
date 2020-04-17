@@ -1,3 +1,4 @@
+export * from './clusterInfo';
 export * from './metricData';
 export * from './metricDefinition';
 export * from './metricInstanceData';
